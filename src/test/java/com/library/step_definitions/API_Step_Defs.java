@@ -9,6 +9,8 @@ import io.restassured.response.Response;
 import io.restassured.response.ValidatableResponse;
 import io.restassured.specification.RequestSpecification;
 
+import java.util.List;
+
 import static io.restassured.RestAssured.*;
 import static org.junit.Assert.*;
 
@@ -18,6 +20,7 @@ public class API_Step_Defs {
     Response response;
     JsonPath jsonPath;
     ValidatableResponse thenPart;
+    String expectedValue;
 
     @Given("I logged Library api as a {string}")
     public void i_logged_library_api_as_a(String role) {
@@ -48,5 +51,22 @@ public class API_Step_Defs {
     public void field_should_not_be_null(String path) {
         String actualValue = jsonPath.getString(path);
         assertNotNull(actualValue);
+    }
+
+    @Given("Path param is {string}")
+    public void path_param_is(String value) {
+        this.expectedValue = value;
+        givenPart.pathParam("id", value);
+    }
+    @Then("{string} field should be same with path param")
+    public void field_should_be_same_with_path_param(String path) {
+        String actualValue = jsonPath.getString(path);
+        assertEquals(expectedValue, actualValue);
+    }
+    @Then("following fields should not be null")
+    public void following_fields_should_not_be_null(List<String> fields) {
+        for (String eachField : fields) {
+            assertNotNull(eachField);
+        }
     }
 }
