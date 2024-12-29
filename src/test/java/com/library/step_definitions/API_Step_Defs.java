@@ -9,7 +9,9 @@ import io.restassured.response.Response;
 import io.restassured.response.ValidatableResponse;
 import io.restassured.specification.RequestSpecification;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static io.restassured.RestAssured.*;
 import static org.junit.Assert.*;
@@ -21,6 +23,7 @@ public class API_Step_Defs {
     JsonPath jsonPath;
     ValidatableResponse thenPart;
     String expectedValue;
+    Map<String, Object> randomDataMap = new HashMap<>();
 
     @Given("I logged Library api as a {string}")
     public void i_logged_library_api_as_a(String role) {
@@ -68,5 +71,36 @@ public class API_Step_Defs {
         for (String eachField : fields) {
             assertNotNull(eachField);
         }
+    }
+
+    @Given("Request Content Type header is {string}")
+    public void request_content_type_header_is(String requestContentType) {
+        givenPart.contentType(requestContentType);
+    }
+    @Given("I create a random {string} as request body")
+    public void i_create_a_random_as_request_body(String dataType) {
+        switch (dataType) {
+            case "book":
+                randomDataMap = LibraryUtil.createRandomBook();
+                break;
+            case "user":
+//                randomDataMap = LibraryUtil.createRandomUser();
+                break;
+            default:
+                new RuntimeException("Invalid datatype: " + dataType);
+        }
+        givenPart.formParams(randomDataMap);
+    }
+    @When("I send POST request to {string} endpoint")
+    public void i_send_post_request_to_endpoint(String endpoint) {
+        response = givenPart.when()
+                .post(endpoint);
+        jsonPath = response.jsonPath();
+        thenPart = response.then();
+    }
+    @Then("the field value for {string} path should be equal to {string}")
+    public void the_field_value_for_path_should_be_equal_to(String path, String expectedValue) {
+        String actualValue = jsonPath.getString(path);
+        assertEquals(actualValue, expectedValue);
     }
 }

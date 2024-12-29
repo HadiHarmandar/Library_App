@@ -1,5 +1,6 @@
 package com.library.utilities;
 
+import com.github.javafaker.Faker;
 import io.restassured.http.ContentType;
 import io.restassured.path.json.JsonPath;
 
@@ -9,6 +10,8 @@ import java.util.Map;
 import static io.restassured.RestAssured.*;
 
 public class LibraryUtil {
+
+    static Faker faker = new Faker();
 
     public static String getToken(String email, String password) {
 
@@ -55,5 +58,18 @@ public class LibraryUtil {
         credentials.put("email", email);
         credentials.put("password", password);
         return credentials;
+    }
+
+    public static Map<String, Object> createRandomBook() {
+        Map<String, Object> book = new HashMap<>();
+
+        book.put("name", "POST book123");
+        book.put("isbn", faker.lordOfTheRings().character());
+        book.put("year", faker.number().numberBetween(2019, 2024));
+        book.put("author", faker.book().author());
+        book.put("book_category_id", 1);
+        book.put("description", faker.chuckNorris().fact());
+
+        return book;
     }
 }
