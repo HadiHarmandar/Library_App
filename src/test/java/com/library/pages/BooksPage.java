@@ -12,9 +12,6 @@ public class BooksPage extends BasePage {
     @FindBy(xpath = "//input[@type='search']")
     public WebElement searchInput;
 
-    @FindBy(xpath = "//td[3]")
-    public WebElement bookRow;
-
     public String findBook(String bookName) {
         searchInput.sendKeys(bookName + Keys.ENTER);
         BrowserUtils.sleep(1);

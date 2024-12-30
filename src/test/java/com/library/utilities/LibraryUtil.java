@@ -4,6 +4,8 @@ import com.github.javafaker.Faker;
 import io.restassured.http.ContentType;
 import io.restassured.path.json.JsonPath;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -71,5 +73,23 @@ public class LibraryUtil {
         book.put("description", faker.chuckNorris().fact());
 
         return book;
+    }
+
+    public static Map<String, Object> createRandomUser() {
+        Map<String, Object> user = new HashMap<>();
+        LocalDate startDate = LocalDate.of(2020, 10, 10);
+        LocalDate endDate = LocalDate.of(2025, 10, 10);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+
+        user.put("full_name", faker.name().fullName());
+        user.put("email", faker.internet().emailAddress());
+        user.put("password", faker.internet().password());
+        user.put("user_group_id", 2);
+        user.put("status", "ACTIVE");
+        user.put("start_date", startDate.format(formatter));
+        user.put("end_date", endDate.format(formatter));
+        user.put("address", faker.address().fullAddress());
+
+        return user;
     }
 }

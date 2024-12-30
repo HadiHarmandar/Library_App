@@ -89,7 +89,7 @@ public class API_Step_Defs {
                 randomDataMap = LibraryUtil.createRandomBook();
                 break;
             case "user":
-//                randomDataMap = LibraryUtil.createRandomUser();
+                randomDataMap = LibraryUtil.createRandomUser();
                 break;
             default:
                 new RuntimeException("Invalid datatype: " + dataType);
