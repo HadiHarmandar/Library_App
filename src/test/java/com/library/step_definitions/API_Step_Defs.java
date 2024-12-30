@@ -34,6 +34,7 @@ public class API_Step_Defs {
     BooksPage booksPage = new BooksPage();
     DashboardPage dashboardPage = new DashboardPage();
     String createdUserId = "";
+    String token = "";
 
     @Given("I logged Library api as a {string}")
     public void i_logged_library_api_as_a(String role) {
@@ -164,5 +165,15 @@ public class API_Step_Defs {
     public void created_user_name_should_appear_in_dashboard_page() {
         BrowserUtils.waitForVisibility(dashboardPage.userIcon, 5);
         assertEquals(randomDataMap.get("full_name"), dashboardPage.userIcon.getText());
+    }
+
+    @Given("I logged Library api with credentials {string} and {string}")
+    public void i_logged_library_api_with_credentials_and(String email, String password) {
+        token = LibraryUtil.getToken(email, password);
+        givenPart.header("x-library-token", token);
+    }
+    @Given("I send token information as request body")
+    public void i_send_token_information_as_request_body() {
+        givenPart.formParam("token", token);
     }
 }
