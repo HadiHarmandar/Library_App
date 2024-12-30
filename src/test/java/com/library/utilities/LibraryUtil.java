@@ -36,7 +36,7 @@ public class LibraryUtil {
         return getToken(credentials.get("email"), credentials.get("password"));
     }
 
-    private static Map<String, String> retrieveCredentials(String role) {
+    public static Map<String, String> retrieveCredentials(String role) {
 
         String email = "";
         String password = "";

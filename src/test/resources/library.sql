@@ -1,1 +1,1 @@
-select * from users;
+select name from books where id = 32476;

@@ -1,5 +1,8 @@
 package com.library.step_definitions;
 
+import com.library.pages.BooksPage;
+import com.library.pages.LoginPage;
+import com.library.utilities.DB_Util;
 import com.library.utilities.LibraryUtil;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
@@ -24,6 +27,8 @@ public class API_Step_Defs {
     ValidatableResponse thenPart;
     String expectedValue;
     Map<String, Object> randomDataMap = new HashMap<>();
+    LoginPage loginPage = new LoginPage();
+    BooksPage booksPage = new BooksPage();
 
     @Given("I logged Library api as a {string}")
     public void i_logged_library_api_as_a(String role) {
@@ -102,5 +107,24 @@ public class API_Step_Defs {
     public void the_field_value_for_path_should_be_equal_to(String path, String expectedValue) {
         String actualValue = jsonPath.getString(path);
         assertEquals(actualValue, expectedValue);
+    }
+
+    @Given("I logged in Library UI as {string}")
+    public void i_logged_in_library_ui_as(String role) {
+        loginPage.login(role);
+    }
+    @Given("I navigate to {string} page")
+    public void i_navigate_to_page(String page) {
+        booksPage.navigate(page);
+    }
+    @Then("UI, Database and API created book information must match")
+    public void ui_database_and_api_created_book_information_must_match() {
+        String bookId = jsonPath.getString("book_id");
+        DB_Util.runQuery("select name from books where id = " + bookId);
+        String actualBookNameInDB = DB_Util.getFirstRowFirstColumn();
+        String expectedBookName = (String) randomDataMap.get("name");
+        String actualBookNameInUI = booksPage.findBook(expectedBookName);
+        assertEquals(expectedBookName, actualBookNameInDB);
+        assertEquals(expectedBookName, actualBookNameInUI);
     }
 }

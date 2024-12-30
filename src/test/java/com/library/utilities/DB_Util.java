@@ -39,7 +39,7 @@ public class DB_Util {
      */
     public static void createConnection() {
 
-        String url = ConfigurationReader.getProperty("dbUrl");
+        String url = ConfigurationReader.getProperty("library2_db_url");
 
         String username = System.getenv("DB_USERNAME");
 
