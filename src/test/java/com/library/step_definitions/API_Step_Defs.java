@@ -87,7 +87,7 @@ public class API_Step_Defs {
     @Then("following fields should not be null")
     public void following_fields_should_not_be_null(List<String> fields) {
         for (String eachField : fields) {
-            assertNotNull(eachField);
+            assertNotNull(jsonPath.getString(eachField));
         }
     }
 
