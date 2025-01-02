@@ -106,7 +106,7 @@ public class API_Step_Defs {
                 randomDataMap = LibraryUtil.createRandomUser();
                 break;
             default:
-                new RuntimeException("Invalid datatype: " + dataType);
+                throw new RuntimeException("Invalid datatype: " + dataType);
         }
         givenPart.formParams(randomDataMap);
     }
